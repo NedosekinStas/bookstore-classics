@@ -1,6 +1,7 @@
 module Api
   module V1
     class AuthorsController < ApplicationController
+      before_action :authorize_access_request!, except: [:show, :index]
       before_action :set_author, only: [:show, :update, :destroy]
 
       # GET /authors
@@ -48,7 +49,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def author_params
-          params.require(:author).permit(:name, :user_id)
+          params.require(:author).permit(:name)
         end
     end
   end
