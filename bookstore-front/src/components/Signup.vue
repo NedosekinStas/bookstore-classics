@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-card class="sign-form">
-      <v-card-title>Вход</v-card-title>
+      <v-card-title>Регистрация</v-card-title>
       <v-card-text>
-        <v-form v-model="isValid" @submit.prevent="signin">
+        <v-form v-model="isValid" @submit.prevent="signup">
           <v-text-field
                   id="email"
                   label="Email"
@@ -14,18 +14,26 @@
           <v-text-field
                   id="password"
                   label="Пароль"
-                  v-model="password"
+                  v-model="пароль"
                   type="password"
                   :rules="[v => !!v || 'Введите пароль']"
+                  required
+          ></v-text-field>
+          <v-text-field
+                  id="password_confirmation"
+                  label=" Подтвердите пароль"
+                  v-model="password_confirmation"
+                  type="password"
+                  :rules="[v => !!v || 'Подтвердите пароль пароль']"
                   required
           ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn type="submit" :disabled="!isValid">Войти</v-btn>
+        <v-btn type="submit" :disabled="!isValid">Зарегистрироваться</v-btn>
       </v-card-actions>
       <v-card-actions>
-        <v-btn to="/signup">Зарегистрироваться</v-btn>
+        <v-btn to="/">Войти</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -33,11 +41,11 @@
 
 <script>
 export default {
-  name: 'Signin',
+  name: 'Signup',
   data: () => ({
     email: '',
     password: '',
-    isValid: true,
+    password_confirmation: '',
     error: ''
   }),
   created () {
@@ -48,7 +56,7 @@ export default {
   },
   methods: {
     signin () {
-      this.$http.plain.post('/signin', { email: this.email, password: this.password })
+      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
         .then(response => this.signinSuccessful(response))
         .catch(error => this.signinFailed(error))
     },
