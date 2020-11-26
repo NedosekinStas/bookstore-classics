@@ -1,11 +1,13 @@
 <template>
   <nav>
     <div class="nav-wrapper container">
-      <a href="#" class="brand-logo">Logo</a>
+      <a href="/" class="brand-logo">BOOKSTORE CLASSIC</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">JavaScript</a></li>
+        <li> <router-link to="/" v-if="!signedIn()">Sign in</router-link></li>
+        <li><router-link to="/signup" v-if="!signedIn()">Sign Up</router-link></li>
+        <li><router-link to="/records" v-if="signedIn()">Records</router-link></li>
+        <li><router-link to="/artists" v-if="signedIn()">Artists</router-link></li>
+        <a href="#" @click.prevent="signOut" v-if="signedIn()">Sign out</a>
       </ul>
     </div>
   </nav>
@@ -18,30 +20,20 @@ export default {
     this.signedIn()
   },
   methods: {
-    signin () {
-      this.$http.plain.post('/signin', { email: this.email, password: this.password })
-        .then(response => this.signinSuccessful(response))
-        .catch(error => this.signinFailed(error))
+    setError (error, text) {
+      this.error = (error.response && error.response.data && error.response.data.error) || text
     },
-    signinSuccessful (response) {
-      if (!response.data.csrf) {
-        this.signinFailed(response)
-        return
-      }
-      localStorage.csrf = response.data.csrf
-      localStorage.signedIn = true
-      this.error = ''
-      this.$router.replace('/books')
+    signedIn () {
+      return localStorage.signedIn
     },
-    signinFailed (error) {
-      this.error = (error.response && error.response.data && error.response.data.error) || ''
-      delete localStorage.csrf
-      delete localStorage.signedIn
-    },
-    checkSignedIn () {
-      if (localStorage.signedIn) {
-        this.$router.replace('/books')
-      }
+    signOut () {
+      this.$http.secured.delete('/signin')
+        .then(response => {
+          delete localStorage.csrf
+          delete localStorage.signedIn
+          this.$router.replace('/')
+        })
+        .catch(error => this.setError(error, 'Cannot sign out'))
     }
   }
 }

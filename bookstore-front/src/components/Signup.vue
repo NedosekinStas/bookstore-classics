@@ -2,20 +2,20 @@
   <div class="container">
     <div class="row">
       <h3 class="">Sign up</h3>
-      <form class="col s12" @submit.prevent="signup">
+      <form class="col s6" @submit.prevent="signup">
         <div class="text-red" v-if="error">{{ error }}</div>
 
-        <div class="input-field col s6">
+        <div class="input-field col s12">
           <label for="email" class="label">E-mail Address</label>
           <input type="email" v-model="email" class="input" id="email" >
         </div>
-        <div class="input-field col s6">
+        <div class="input-field col s12">
           <label for="password" class="label">Password</label>
           <input type="password" v-model="password" class="input" id="password">
         </div>
-        <button type="submit" class="waves-effect btn">Sign In</button>
+        <button type="submit" class="waves-effect btn">Sign Up</button>
 
-       <div class="my-4"><router-link to="/" class="link-grey">Sign In</router-link></div>
+       <div class="col s2"><router-link to="/" class="link-grey">Sign In</router-link></div>
       </form>
     </div>
   </div>
@@ -55,7 +55,7 @@ export default {
       this.$router.replace('/books')
     },
     signupFailed (error) {
-      this.error = (error.response && error.response.data && error.response.data.error) || ''
+      this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
       delete localStorage.csrf
       delete localStorage.signedIn
     },
