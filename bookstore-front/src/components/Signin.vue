@@ -1,45 +1,36 @@
 <template>
-  <v-container>
-    <v-card class="sign-form">
-      <v-card-title>Вход</v-card-title>
-      <v-card-text>
-        <v-form v-model="isValid" @submit.prevent="signin">
-          <v-text-field
-                  id="email"
-                  label="Email"
-                  v-model="email"
-                  :rules="[v => !!v || 'Введите Email']"
-                  required
-          ></v-text-field>
-          <v-text-field
-                  id="password"
-                  label="Пароль"
-                  v-model="password"
-                  type="password"
-                  :rules="[v => !!v || 'Введите пароль']"
-                  required
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn type="submit" :disabled="!isValid">Войти</v-btn>
-      </v-card-actions>
-      <v-card-actions>
-        <v-btn to="/signup">Зарегистрироваться</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+  <div class="container">
+    <div class="row">
+      <h3 class="">Sign In</h3>
+      <form class="col s12" @submit.prevent="signin">
+        <div class="text-red" v-if="error">{{ error }}</div>
+
+        <div class="input-field col s6">
+          <label for="email" class="label">E-mail Address</label>
+          <input type="email" v-model="email" class="input" id="email">
+        </div>
+        <div class="input-field col s6">
+          <label for="password" class="label">Password</label>
+          <input type="password" v-model="password" class="input" id="password">
+        </div>
+        <button type="submit" class="waves-effect btn">Sign In</button>
+
+        <div class="my-4"><router-link to="/signup" class="link-grey">Sign up</router-link></div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Signin',
-  data: () => ({
-    email: '',
-    password: '',
-    isValid: true,
-    error: ''
-  }),
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: ''
+    }
+  },
   created () {
     this.checkSignedIn()
   },

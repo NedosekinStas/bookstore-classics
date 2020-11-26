@@ -1,66 +1,50 @@
 <template>
-  <v-container>
-    <v-card class="sign-form">
-      <v-card-title>Регистрация</v-card-title>
-      <v-card-text>
-        <v-form v-model="isValid" @submit.prevent="signup">
-          <v-text-field
-                  id="email"
-                  label="Email"
-                  v-model="email"
-                  :rules="[v => !!v || 'Введите Email']"
-                  required
-          ></v-text-field>
-          <v-text-field
-                  id="password"
-                  label="Пароль"
-                  v-model="пароль"
-                  type="password"
-                  :rules="[v => !!v || 'Введите пароль']"
-                  required
-          ></v-text-field>
-          <v-text-field
-                  id="password_confirmation"
-                  label=" Подтвердите пароль"
-                  v-model="password_confirmation"
-                  type="password"
-                  :rules="[v => !!v || 'Подтвердите пароль пароль']"
-                  required
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn type="submit" :disabled="!isValid">Зарегистрироваться</v-btn>
-      </v-card-actions>
-      <v-card-actions>
-        <v-btn to="/">Войти</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+  <div class="container">
+    <div class="row">
+      <h3 class="">Sign up</h3>
+      <form class="col s12" @submit.prevent="signup">
+        <div class="text-red" v-if="error">{{ error }}</div>
+
+        <div class="input-field col s6">
+          <label for="email" class="label">E-mail Address</label>
+          <input type="email" v-model="email" class="input" id="email" >
+        </div>
+        <div class="input-field col s6">
+          <label for="password" class="label">Password</label>
+          <input type="password" v-model="password" class="input" id="password">
+        </div>
+        <button type="submit" class="waves-effect btn">Sign In</button>
+
+       <div class="my-4"><router-link to="/" class="link-grey">Sign In</router-link></div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Signup',
-  data: () => ({
-    email: '',
-    password: '',
-    password_confirmation: '',
-    error: ''
-  }),
+  data () {
+    return {
+      email: '',
+      password: '',
+      password_confirmation: '',
+      error: ''
+    }
+  },
   created () {
-    this.checkSignedIn()
+    this.checkedSignedIn()
   },
   updated () {
-    this.checkSignedIn()
+    this.checkedSignedIn()
   },
   methods: {
-    signin () {
+    signup () {
       this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
         .then(response => this.signinSuccessful(response))
         .catch(error => this.signinFailed(error))
     },
-    signinSuccessful (response) {
+    signupSuccessful (response) {
       if (!response.data.csrf) {
         this.signinFailed(response)
         return
@@ -70,7 +54,7 @@ export default {
       this.error = ''
       this.$router.replace('/books')
     },
-    signinFailed (error) {
+    signupFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
       delete localStorage.signedIn
