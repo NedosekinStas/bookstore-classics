@@ -1,21 +1,21 @@
 <template>
   <div class="container">
     <div class="row">
-      <h3 class="">Sign In</h3>
+      <h3 class="">Войти</h3>
       <form class="col s6" @submit.prevent="signin">
         <div class="text-red" v-if="error">{{ error }}</div>
 
         <div class="input-field col s12">
-          <label for="email" class="label">E-mail Address</label>
+          <label for="email" class="label">E-mail Адресс</label>
           <input type="email" v-model="email" class="input" id="email">
         </div>
         <div class="input-field col s12">
-          <label for="password" class="label">Password</label>
+          <label for="password" class="label">Пароль</label>
           <input type="password" v-model="password" class="input" id="password">
         </div>
-        <button type="submit" class="waves-effect btn">Sign In</button>
+        <button type="submit" class="waves-effect btn">Войти</button>
 
-        <div class="col s4"><router-link to="/signup" class="link-grey">Sign up</router-link></div>
+        <div class="col s4"><router-link to="/signup" class="link-grey">Зарегистрироваться</router-link></div>
       </form>
     </div>
   </div>
