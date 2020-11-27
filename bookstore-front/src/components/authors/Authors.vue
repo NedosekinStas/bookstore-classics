@@ -6,7 +6,7 @@
 
       <form @submit.prevent="addAuthor">
           <div class="col s6">
-              <input type="text" 
+              <input type="text"
                 class="input"
                 autofocus
                 autocomplete="off"
@@ -21,7 +21,7 @@
       <ul class="list-reset">
           <li class="" v-for="author in authors" :key="author.id" :author="author">
             <div class="authors">
-                <p class="authors-name">{{ authors.name }}</p>    
+                <p class="authors-name">{{ authors.name }}</p>
                 <button class="btn" @click.prevent="editAuthor(author)">Изменить</button>
                 <button class="btn" @click.prevent="removeAuthor(author)">Удалить</button>
             </div>
@@ -43,36 +43,36 @@
 export default {
   name: 'Author',
   data () {
-    return{
+    return {
       authors: [],
       newAuthor: [],
       error: '',
-      editAuthor: ''        
+      editedAuthor: ''
     }
   },
   created () {
     if (!localStorage.signedIn) {
-    this.$router.replace('/')
+      this.$router.replace('/')
     } else {
-        this.$http.secured.get('/api/v1/artists')
+      this.$http.secured.get('/api/v1/artists')
         .then(response => { this.authors = response.data })
         .catch(error => this.setError(error, 'Что то пошло не так'))
     }
   },
-  methods:{
+  methods: {
     setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
     },
     // Create Author
     addAuthor () {
       const value = this.newAuthor
-      if (!value){
+      if (!value) {
         return
       }
-      this.$http.secured.post('/api/v1/authors', { author: { name: this.newAuthor.name }})
+      this.$http.secured.post('/api/v1/authors', {author: { name: this.newAuthor.name }})
         .then(response => {
           this.authors.push(response.data)
-          this.newAuthor=''
+          this.newAuthor = ''
         })
         .catch(error => this.setError(error, 'Автор не создан'))
     },
@@ -80,17 +80,17 @@ export default {
     removeAuthor (author) {
       this.$http.secured.delete(`/api/v1/authors/${author.id}`)
         .then(response => {
-          this.authors.splice(this.authors.indexOf(author), 1)  
+          this.authors.splice(this.authors.indexOf(author), 1)
         })
         .catch(error => this.setError(error, 'Новозможно удалить автора'))
     },
     editAuthor (author) {
-      this.editAuthor = author
+      this.editedAuthor = author
     },
     updateAuthor (author) {
-        this.editAuthor = ''
-        this.$http.secured.patch(`/api/v1/authoes/${authors.id}`, { author: { title: author.name }})
-          .catch(error => this.setError(error, 'Невозможно обновить автора'))
+      this.editAuthor = ''
+      this.$http.secured.patch(`/api/v1/authoes/${author.id}`, {author: { title: author.name }})
+        .catch(error => this.setError(error, 'Невозможно обновить автора'))
     }
   }
 
